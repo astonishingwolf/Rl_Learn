@@ -8,7 +8,8 @@ import numpy as np
 
 class Agent():
     def __init__(self,eps = 0.1 , gamma=0.99):
-        self.Q = {}
+        self.Q = {} # action values
+        #similar to the value function
         self.sum_space = [i for i in range(4,22)]
         self.dealer_show_card_space = [i+1 for i in range(10)]
         self.ace_space = [False, True]
@@ -40,13 +41,18 @@ class Agent():
         policy = {}
         n = len(self.action.policy)
         for state in self.state_space :
+            # intialising 1/n to each hence random policy
+            # intiallly ...after some time it will go on checking the greedy path.
             policy[state] = [1/n for i in range(n)]
         self.policy = policy
         
     
     def choose_action(self, state) :
+        # choosing 0,1 with the probability of given by self.policy[state]
+        # this policy will be updated each time hence we will get better prediction
         action =  np.random.choice(self.action_space , p= self.policy[state])
         return action
+    
     
     def update_Q(self):
         for idt, (state,action, _) in enumerate(self.memory):
@@ -59,7 +65,6 @@ class Agent():
                     discount *= self.gamma
                     self.returns[(state,action)].append(G)
             
-            
         for state,action in self.memory:
             self.Q[(state,action)] = np.mean(self.returns[(state,action)])
             self.update_policy(state)
@@ -68,7 +73,8 @@ class Agent():
             self.pairs_visited[state_action]= 0
             
         self.memory = []
-        
+    # this is the main code fo rimplementing the policy change functionality
+    # it will useful in
     def update_policy(self , state):
         action = [self.Q[state,a] for a in self.action_space]
         a_max = np.argmax(action)
@@ -76,8 +82,7 @@ class Agent():
         probs = []
         for action in self.action_space:
             prob = 1- self.eps + self.eps / n_actions if action == a_max else \
-                    self.eps/ n_actions
-                    
+                    self.eps/ n_actions              
             probs.append(prob)
         self.policy[state] = probs
             
