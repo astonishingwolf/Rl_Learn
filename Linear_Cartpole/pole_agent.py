@@ -6,7 +6,7 @@ Created on Sun Aug 22 03:04:00 2021
 """
 import numpy as np
 
-class agent():
+class Agent():
     def __init__(self, lr , gamma , n_actions , state_space , eps_start , eps_end, eps_dec):
         self.lr =lr
         self.gamma =gamma
