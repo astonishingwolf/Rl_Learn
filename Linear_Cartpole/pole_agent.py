@@ -24,20 +24,20 @@ class Agent():
     
     #All the Q values are then intialised to zero.    
     def init_q(self):
-        for state in self.state.space:
+        for state in self.state_space:
             for action in self.actions:
                 self.Q[(state,action)] = 0.0
     
     #this will choose the maximum action based upon their Q-Value
     def max_action(self,state):
-        actions = np.array(self.Q[(state,a)] for a in self.action_space)
+        actions = np.array(self.Q[(state,a)] for a in self.actions)
         action = np.argmax(actions)
         return action
     
     #this will choose the next action based upon e-greedy method
     def choose_action(self,state):
         if np.random.random() < self.epsilon:
-            action = np.random.choice(self.action_space)
+            action = np.random.choice(self.actions)
         else:
             action = self.max_action(state)
         return action

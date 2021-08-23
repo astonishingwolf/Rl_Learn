@@ -5,12 +5,12 @@ Created on Mon Aug 23 21:05:59 2021
 @author: astonishing_wolf
 
 """
-
+print('hi')
 import gym
 import matplotlib.pyplot as plt
 import numpy as np
 from pole_agent import Agent
-
+print('hi')
 class CartPoleState():
     def __init__(self,bounds =(2.4,4,0.209,4),n_bins=10):
         self.position_space = np.linspace(-1*bounds[0],bounds[0],n_bins)
@@ -18,6 +18,7 @@ class CartPoleState():
         self.pole_angle_space = np.linspace(-1*bounds[2],bounds[2],n_bins)
         self.pole_velocity_space = np.linspace(-1*bounds[3],bounds[3],n_bins)
         self.states = self.get_state_space()
+        print('hi')
     
     #intialises all the states it is used to define the Q value
     def get_state_space(self):
@@ -26,7 +27,7 @@ class CartPoleState():
             for j in range(len(self.velocity_space)+1):
                 for k in range(len(self.pole_angle_space)+1):
                     for l in range(len(self.pole_velocity_space)+1):
-                        states.append(i,j,k,l)
+                        states.append([i,j,k,l])
         return states
     
     #It is used to digitize the observations.Once we have the observations we can used
@@ -52,13 +53,14 @@ def plot_learning_curve(scores,x):
     
 
 
-if __name__ == '__name__':
-    env = gym('CartPole-v0')
+if __name__ == '__main__':
+    print('hi')
+    env = gym.make('CartPole-v0')
     n_games = 50000
     eps_dec = 2/n_games
     digitizer = CartPoleState()
     #The states are then passed on to agent class to make the ways.
-    agent = Agent(lr=0.01 , gamma =0.99 , n_actions=2 , eps_start =1.0,eps_end=0.01,eps_dec=eps_dec,state_space=digitizer.states)
+    agent = Agent(lr=0.01 , gamma =0.99 , n_actions=2 , state_space=digitizer.states, eps_start =1.0,eps_end=0.01,eps_dec=eps_dec)
     
     scores=[]
     print('it works')
